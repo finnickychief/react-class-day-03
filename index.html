@@ -10,7 +10,7 @@
 
 <body>
 
-
+  <div id="root"></div>
 
 
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -19,8 +19,34 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
 
 
-  <script type="babel/text">
+  <!-- For form: 
+      input for a Request type. This can be a normal input, or a select
+      input for a url. This should be a normal text input
+      input for number of items to grab. This can be a number input or a select
+    -->
+
+
+  <!-- From posts: title, body -->
+  <!-- From comments: name, email, body  -->
+  <!-- From users: name, username, email, address(as multiple fields) -->
+  <script type="text/babel">
+
+ 
+    class App extends React.Component {
+      // Class components need a render with a return statement.
+      render() {
+
+        return (
+          <h1>Hello World</h1>
+
+        );
+      }
+    }
   
+
+    ReactDOM.render(<App />, document.querySelector('#root'));
+
+
   
   </script>
 
