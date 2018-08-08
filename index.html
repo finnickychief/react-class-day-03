@@ -30,6 +30,37 @@
   <!-- From users: name, username, email, address(as multiple fields) -->
   <script type="text/babel">
 
+    const User = (props) => {
+      return (
+        <div>
+          <h3>{props.name}</h3>
+          <p>{props.username}</p>
+          <p>{props.email}</p>
+          <p>{`${props.address.city}, ${props.address.zipcode}`}</p>
+        </div>
+      );
+    }
+
+    const Post = (props) => {
+      return (
+        <div>
+          <h3>{props.title}</h3>
+          <p>{props.body}</p>
+        </div>
+      );
+    }
+
+    const Comment = (props) => {
+      return (
+        <div>
+          <h3>{props.name}</h3>
+          <h4>{props.email}</h4>
+          <p>{props.body}</p>  
+        </div>
+      )
+
+    }
+
     class QueryForm extends React.Component {
       constructor(props){
         // Call constructor of React.Component
@@ -37,7 +68,7 @@
         
         this.state = {
           method: 'get',
-          apiurl: '',
+          apiurl: 'https://jsonplaceholder.typicode.com/users',
           numItems: ''
         }
       }
@@ -113,19 +144,40 @@
  
     class App extends React.Component {
       state = {
-        ary: []
+        ary: [],
+        itemType: '',
       }
 
       onSubmit(queryObject){
+
         switch(queryObject.method){
           case 'get': {
             axios.get(queryObject.apiurl)
-              .then(response => 
+              .then(response => {
+                // Grab the item type so we can tell our render which component to use.
+                let splitRequest = queryObject.apiurl.split('/');
+                console.log(splitRequest);
+
+                let itemType = splitRequest[splitRequest.length-1];
+                console.log(itemType);
+
+                this.setState({ itemType: itemType }); 
+
+                // Get items
+                let itemsRetrieved;
+
+                // If 'all' was not selected, just grab the amount of items the user selected
+                if(queryObject.numItems){
+                  itemsRetrieved = response.data.slice(0, Number(queryObject.numItems));
+                } else { // Otherwise, get the entire array.
+                  itemsRetrieved = response.data;
+                }
+
                 this.setState(
                   {
-                    ary: response.data.slice(0, Number(queryObject.numItems))
+                    ary: itemsRetrieved
                   })
-              )
+              })
               .catch(err => console.log(err))
           }
           case 'post': {
@@ -143,9 +195,53 @@
       render() {
         console.log(this.state);
 
+        let outputAry = [];
+
+        switch(this.state.itemType){
+          case 'posts': { // Map to post component
+            outputAry = this.state.ary.map(
+              (item, index) => 
+              <Post 
+                key={'outputID-' + index} 
+                title={item.title} 
+                body={item.body} 
+              />)
+            break;
+          }
+          case 'comments': {
+            outputAry = this.state.ary.map(
+              (item, index) =>
+              <Comment 
+                key={'outputID-' + index} 
+                name={item.name}
+                email={item.email}
+                body={item.body}
+              />)
+            break;
+          }
+          case 'users': {
+            outputAry = this.state.ary.map(
+              (item, index) =>
+                <User 
+                  key={'outputID-' + index} 
+                  name={item.name}
+                  username={item.username}
+                  email={item.email}
+                  address={item.address}
+                />)
+            break;
+          }
+          default: { // If there is no valid itemType, display nothing
+            outputAry = null;
+          }
+        }
+
         return (
           <div>
             <QueryForm numItems="10" onSubmit={this.onSubmit.bind(this)} />
+            <div>
+              {outputAry}
+            </div>
           </div>
         );
       }
