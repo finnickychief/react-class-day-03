@@ -31,7 +31,7 @@
   <script type="text/babel">
 
     const QueryForm = (props) => {
-      // Build the numItems options
+      // Build the numItems options as an array to be output
       let numItemsOptions = [<option key="all" value="">All</option>];
       for(let i = 1; i <= props.numItems; i++){
         numItemsOptions.push(<option key={i} value={i}>{i}</option>);
@@ -39,7 +39,7 @@
 
       // Must return exactly one item from any functional component or render method
       return (
-        <form>
+        <form onSubmit={props.onSubmit}>
           <label>Method: </label>
           <select name="method">
             <option value="get">Get</option>
@@ -53,6 +53,7 @@
           <select name="numItems">
             {numItemsOptions}
           </select>
+          <button>Send Request</button>
         </form>
       );
     }
