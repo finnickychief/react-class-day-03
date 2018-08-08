@@ -31,17 +31,30 @@
   <!-- From users: name, username, email, address(as multiple fields) -->
   <script type="text/babel">
 
+    const QueryForm = (props) => {
+      // Must return exactly one item from any functional component or render method
+      return (
+        <form>
+          <select name="method">
+            <option value="get">Get</option>
+            <option value="post">Post</option>
+          </select>
+        </form>
+      );
+    }
  
     class App extends React.Component {
       // Class components need a render with a return statement.
       render() {
-
         return (
-          <h1>Hello World</h1>
-
+          <div>
+            <QueryForm />
+          </div>
         );
       }
     }
+
+
   
 
     ReactDOM.render(<App />, document.querySelector('#root'));
