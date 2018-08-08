@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/finnickychief/react-class-day-03#readme",
   "dependencies": {
+    "axios": "^0.18.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "parcel-bundler": "^1.9.7",
     "react": "^16.4.2",
     "react-dom": "^16.4.2"
