@@ -12,7 +12,6 @@
 
   <div id="root"></div>
 
-
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
@@ -32,12 +31,27 @@
   <script type="text/babel">
 
     const QueryForm = (props) => {
+      // Build the numItems options
+      let numItemsOptions = [<option key="all" value="">All</option>];
+      for(let i = 1; i <= props.numItems; i++){
+        numItemsOptions.push(<option key={i} value={i}>{i}</option>);
+      }
+
       // Must return exactly one item from any functional component or render method
       return (
         <form>
+          <label>Method: </label>
           <select name="method">
             <option value="get">Get</option>
             <option value="post">Post</option>
+          </select>
+          <br />
+          <label htmlFor="apiurl">URL</label> 
+          <input type="text" name="apiurl" id="apiurl" />
+          <br />
+          <label>Number to retrieve: </label>
+          <select name="numItems">
+            {numItemsOptions}
           </select>
         </form>
       );
@@ -48,7 +62,7 @@
       render() {
         return (
           <div>
-            <QueryForm />
+            <QueryForm numItems="10" />
           </div>
         );
       }
