@@ -117,9 +117,6 @@
       }
 
       onSubmit(queryObject){
-        console.log(queryObject);
-
-       // axios[queryObject.method](queryObject.apiurl += `${}`);
         switch(queryObject.method){
           case 'get': {
             axios.get(queryObject.apiurl)
