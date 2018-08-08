@@ -30,32 +30,52 @@
   <!-- From users: name, username, email, address(as multiple fields) -->
   <script type="text/babel">
 
-    const QueryForm = (props) => {
-      // Build the numItems options as an array to be output
-      let numItemsOptions = [<option key="all" value="">All</option>];
-      for(let i = 1; i <= props.numItems; i++){
-        numItemsOptions.push(<option key={i} value={i}>{i}</option>);
+    class QueryForm extends React.Component {
+      constructor(props){
+        // Call constructor of React.Component
+        super(props);
+        
+        this.state = {
+          method: 'get',
+          apiurl: '',
+          numItems: 'All'
+        }
       }
 
-      // Must return exactly one item from any functional component or render method
-      return (
-        <form onSubmit={props.onSubmit}>
-          <label>Method: </label>
-          <select name="method">
-            <option value="get">Get</option>
-            <option value="post">Post</option>
-          </select>
-          <br />
-          <label htmlFor="apiurl">URL</label> 
-          <input type="text" name="apiurl" id="apiurl" />
-          <br />
-          <label>Number to retrieve: </label>
-          <select name="numItems">
-            {numItemsOptions}
-          </select>
-          <button>Send Request</button>
-        </form>
-      );
+      // event handler for our controlled input components
+      onChange = (e) => this.setState({[e.target.name]: e.target.value})
+
+
+      render() {
+        // Destructure current props so we don't have to change the form after our conversion
+        const { props } = this;
+
+        // Build the numItems options as an array to be output
+        let numItemsOptions = [<option key="all" value="">All</option>];
+        for(let i = 1; i <= props.numItems; i++){
+          numItemsOptions.push(<option key={i} value={i}>{i}</option>);
+        }
+
+        // Must return exactly one item from any functional component or render method
+        return (
+          <form onSubmit={props.onSubmit}>
+            <label>Method: </label>
+            <select name="method" value={this.state.method} onChange={this.onChange.bind(this)}>
+              <option value="get">Get</option>
+              <option value="post">Post</option>
+            </select>
+            <br />
+            <label htmlFor="apiurl">URL: </label> 
+            <input type="text" name="apiurl" id="apiurl" value={this.state.apiurl} onChange={this.onChange.bind(this)}/>
+            <br />
+            <label>Number to retrieve: </label>
+            <select name="numItems" value={this.state.numItems} onChange={this.onChange.bind(this)}>
+              {numItemsOptions}
+            </select>
+            <button>Send Request</button>
+          </form>
+        );
+      }
     }
  
     class App extends React.Component {
